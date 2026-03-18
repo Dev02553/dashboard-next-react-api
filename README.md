@@ -3,7 +3,6 @@
 Interface de produto com tabela, filtros, formulários e integração com backend.
 
 ![Status](https://img.shields.io/badge/status-completo-22c55e)
-<<<<<<< HEAD
 ![Next.js](https://img.shields.io/badge/Next.js-15-black)
 ![React](https://img.shields.io/badge/React-19-61dafb)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6)
@@ -30,36 +29,6 @@ A aplicação foi estruturada para servir como base reutilizável em dashboards 
 - Filtro por status
 - Ordenação por nome, preço e estoque
 - Formulário com validação
-=======
-![Next.js](https://img.shields.io/badge/Next.js-16-black)
-![React](https://img.shields.io/badge/React-19-61dafb)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6)
-![Tailwind](https://img.shields.io/badge/TailwindCSS-4-38bdf8)
-
-## Sobre o projeto
-
-Interface moderna de produto com foco em listagem, busca, filtros, ordenação e validação de formulário.
-Estruturada como base reutilizável para dashboards administrativos e painéis internos, com componentes
-escaláveis e integração com API.
-
-## Stack
-
-- **Next.js 16**
-- **React 19**
-- **TypeScript 5** com `strict: true`
-- **Tailwind CSS 4**
-- **Zod 4** para validação
-- **Route Handlers** do Next.js como API mock
-
-## Funcionalidades
-
-- Tabela de produtos com busca, filtro por status e ordenação
-- KPI cards com totais derivados dos dados da API
-- Formulário com validação client-side via Zod
-- Schema compartilhado entre formulário e API route
-- Tipos centralizados em `lib/types.ts`
-- Skeleton de loading e empty state na tabela
->>>>>>> c0b2770 (refactor: centraliza tipos, melhora a11y e UX do dashboard)
 - Estrutura pronta para deploy no Vercel
 - Integração inicial com backend via `fetch`
 
