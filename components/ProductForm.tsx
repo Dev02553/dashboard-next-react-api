@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { productSchema, type ProductFormValues } from "@/lib/product-schema";
+import { PRODUCT_STATUSES } from "@/lib/types";
 
 const initialValues: ProductFormValues = {
   name: "",
@@ -42,9 +43,7 @@ export function ProductForm() {
     try {
       const response = await fetch("/api/products", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(parsed.data),
       });
 
@@ -57,7 +56,8 @@ export function ProductForm() {
 
       setFeedback(`Produto validado e enviado para a API mock com sucesso: ${data.name}.`);
       setValues(initialValues);
-    } catch {
+    } catch (error) {
+      console.error("[ProductForm] fetch error:", error);
       setFeedback("Falha de rede ao integrar com a API.");
     } finally {
       setSending(false);
@@ -73,8 +73,9 @@ export function ProductForm() {
 
       <form className="grid gap-4" onSubmit={handleSubmit}>
         <div>
-          <label className="mb-1 block text-sm text-zinc-300">Nome</label>
+          <label htmlFor="field-name" className="mb-1 block text-sm text-zinc-300">Nome</label>
           <input
+            id="field-name"
             className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-500"
             value={values.name}
             onChange={(e) => updateField("name", e.target.value)}
@@ -84,8 +85,9 @@ export function ProductForm() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm text-zinc-300">Categoria</label>
+          <label htmlFor="field-category" className="mb-1 block text-sm text-zinc-300">Categoria</label>
           <input
+            id="field-category"
             className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-500"
             value={values.category}
             onChange={(e) => updateField("category", e.target.value)}
@@ -96,8 +98,9 @@ export function ProductForm() {
 
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm text-zinc-300">Preço</label>
+            <label htmlFor="field-price" className="mb-1 block text-sm text-zinc-300">Preço</label>
             <input
+              id="field-price"
               type="number"
               step="0.01"
               className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-500"
@@ -109,8 +112,9 @@ export function ProductForm() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm text-zinc-300">Estoque</label>
+            <label htmlFor="field-stock" className="mb-1 block text-sm text-zinc-300">Estoque</label>
             <input
+              id="field-stock"
               type="number"
               className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-500"
               value={Number.isNaN(values.stock) ? "" : values.stock}
@@ -122,15 +126,16 @@ export function ProductForm() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm text-zinc-300">Status</label>
+          <label htmlFor="field-status" className="mb-1 block text-sm text-zinc-300">Status</label>
           <select
+            id="field-status"
             className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-500"
             value={values.status}
             onChange={(e) => updateField("status", e.target.value as ProductFormValues["status"])}
           >
-            <option value="Ativo">Ativo</option>
-            <option value="Pendente">Pendente</option>
-            <option value="Arquivado">Arquivado</option>
+            {PRODUCT_STATUSES.map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
           </select>
           {errors.status ? <p className="mt-1 text-sm text-rose-400">{errors.status}</p> : null}
         </div>

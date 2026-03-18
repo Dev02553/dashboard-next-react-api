@@ -2,8 +2,7 @@
 
 import { useMemo } from "react";
 import { Badge } from "@/components/Badge";
-import type { Product, ProductStatus } from "@/lib/types";
-import type { SortField } from "@/components/ProductFilters";
+import type { Product, StatusFilter, SortField } from "@/lib/types";
 
 export function ProductTable({
   items,
@@ -13,7 +12,7 @@ export function ProductTable({
 }: {
   items: Product[];
   search: string;
-  status: "Todos" | ProductStatus;
+  status: StatusFilter;
   sortBy: SortField;
 }) {
   const filtered = useMemo(() => {
@@ -38,32 +37,41 @@ export function ProductTable({
         </span>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full text-left text-sm">
-          <thead className="text-zinc-400">
-            <tr>
-              <th className="px-3 py-2 font-medium">Produto</th>
-              <th className="px-3 py-2 font-medium">Categoria</th>
-              <th className="px-3 py-2 font-medium">Status</th>
-              <th className="px-3 py-2 font-medium">Preço</th>
-              <th className="px-3 py-2 font-medium">Estoque</th>
-              <th className="px-3 py-2 font-medium">Atualizado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((item) => (
-              <tr key={item.id} className="border-t border-zinc-800 text-zinc-200">
-                <td className="px-3 py-3 font-medium">{item.name}</td>
-                <td className="px-3 py-3">{item.category}</td>
-                <td className="px-3 py-3"><Badge status={item.status} /></td>
-                <td className="px-3 py-3">R$ {item.price.toFixed(2)}</td>
-                <td className="px-3 py-3">{item.stock}</td>
-                <td className="px-3 py-3">{item.updatedAt}</td>
+      {filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <p className="text-sm font-medium text-zinc-300">Nenhum produto encontrado</p>
+          <p className="mt-1 text-sm text-zinc-500">
+            Tente ajustar a busca ou o filtro de status.
+          </p>
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-left text-sm">
+            <thead className="text-zinc-400">
+              <tr>
+                <th className="px-3 py-2 font-medium">Produto</th>
+                <th className="px-3 py-2 font-medium">Categoria</th>
+                <th className="px-3 py-2 font-medium">Status</th>
+                <th className="px-3 py-2 font-medium">Preço</th>
+                <th className="px-3 py-2 font-medium">Estoque</th>
+                <th className="px-3 py-2 font-medium">Atualizado</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {filtered.map((item) => (
+                <tr key={item.id} className="border-t border-zinc-800 text-zinc-200">
+                  <td className="px-3 py-3 font-medium">{item.name}</td>
+                  <td className="px-3 py-3">{item.category}</td>
+                  <td className="px-3 py-3"><Badge status={item.status} /></td>
+                  <td className="px-3 py-3">R$ {item.price.toFixed(2)}</td>
+                  <td className="px-3 py-3">{item.stock}</td>
+                  <td className="px-3 py-3">{item.updatedAt}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </section>
   );
 }

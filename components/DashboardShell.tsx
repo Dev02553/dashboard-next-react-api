@@ -2,19 +2,18 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { KpiCard } from "@/components/KpiCard";
-import { ProductFilters, type SortField } from "@/components/ProductFilters";
+import { ProductFilters } from "@/components/ProductFilters";
 import { ProductForm } from "@/components/ProductForm";
 import { ProductTable } from "@/components/ProductTable";
-import type { Product, ProductStatus } from "@/lib/types";
+import type { Product, StatusFilter, SortField } from "@/lib/types";
 
 export function DashboardShell() {
   const [items, setItems] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<"Todos" | ProductStatus>("Todos");
+  const [status, setStatus] = useState<StatusFilter>("Todos");
   const [sortBy, setSortBy] = useState<SortField>("name");
-
   useEffect(() => {
     async function loadProducts() {
       try {
@@ -49,10 +48,14 @@ export function DashboardShell() {
       </section>
 
       {loading ? (
-        <div className="mb-6 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 text-sm text-zinc-300">
-          Carregando produtos...
-        </div>
-      ) : null}
+  <div className="mb-6 space-y-3">
+    <div className="h-10 animate-pulse rounded-xl bg-zinc-800/70" />
+    <div className="h-10 animate-pulse rounded-xl bg-zinc-800/70" />
+    <div className="h-10 animate-pulse rounded-xl bg-zinc-800/70" />
+    <div className="h-10 animate-pulse rounded-xl bg-zinc-800/70" />
+    <div className="h-10 animate-pulse rounded-xl bg-zinc-800/70" />
+  </div>
+) : null}
 
       {error ? (
         <div className="mb-6 rounded-2xl border border-rose-500/20 bg-rose-500/10 p-6 text-sm text-rose-300">

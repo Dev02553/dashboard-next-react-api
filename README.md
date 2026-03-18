@@ -3,6 +3,7 @@
 Interface de produto com tabela, filtros, formulários e integração com backend.
 
 ![Status](https://img.shields.io/badge/status-completo-22c55e)
+<<<<<<< HEAD
 ![Next.js](https://img.shields.io/badge/Next.js-15-black)
 ![React](https://img.shields.io/badge/React-19-61dafb)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6)
@@ -29,6 +30,36 @@ A aplicação foi estruturada para servir como base reutilizável em dashboards 
 - Filtro por status
 - Ordenação por nome, preço e estoque
 - Formulário com validação
+=======
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![React](https://img.shields.io/badge/React-19-61dafb)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6)
+![Tailwind](https://img.shields.io/badge/TailwindCSS-4-38bdf8)
+
+## Sobre o projeto
+
+Interface moderna de produto com foco em listagem, busca, filtros, ordenação e validação de formulário.
+Estruturada como base reutilizável para dashboards administrativos e painéis internos, com componentes
+escaláveis e integração com API.
+
+## Stack
+
+- **Next.js 16**
+- **React 19**
+- **TypeScript 5** com `strict: true`
+- **Tailwind CSS 4**
+- **Zod 4** para validação
+- **Route Handlers** do Next.js como API mock
+
+## Funcionalidades
+
+- Tabela de produtos com busca, filtro por status e ordenação
+- KPI cards com totais derivados dos dados da API
+- Formulário com validação client-side via Zod
+- Schema compartilhado entre formulário e API route
+- Tipos centralizados em `lib/types.ts`
+- Skeleton de loading e empty state na tabela
+>>>>>>> c0b2770 (refactor: centraliza tipos, melhora a11y e UX do dashboard)
 - Estrutura pronta para deploy no Vercel
 - Integração inicial com backend via `fetch`
 
@@ -45,6 +76,7 @@ npm install
 Ambiente de desenvolvimento
 npm run dev
 
+<<<<<<< HEAD
 A aplicação ficará disponível em:
 
 http://localhost:3000
@@ -142,3 +174,75 @@ GitHub: https://github.com/Dev02553
 LinkedIn: https://www.linkedin.com/in/david-silva-rodrigues-500190284/
 
 E-mail: David_2553@hotmail.com
+=======
+Acesse em `http://localhost:3000`
+
+## Build de produção
+```bash
+npm run build
+npm run start
+```
+
+## Estrutura do projeto
+```
+dashboard_next_react_api/
+├── app/
+│   ├── api/products/route.ts   # API mock (GET + POST)
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── Badge.tsx
+│   ├── DashboardShell.tsx      # fetch, loading, error e estado global
+│   ├── KpiCard.tsx
+│   ├── ProductFilters.tsx
+│   ├── ProductForm.tsx
+│   └── ProductTable.tsx
+├── lib/
+│   ├── mock-products.ts
+│   ├── product-schema.ts       # schema Zod compartilhado
+│   └── types.ts                # tipos e constantes centralizados
+├── package.json
+└── tsconfig.json
+```
+
+## Fluxo da aplicação
+
+1. `DashboardShell` faz `fetch` em `/api/products` ao montar
+2. Durante o carregamento, exibe skeleton de loading
+3. Os produtos são listados na tabela com busca, filtro e ordenação
+4. O formulário valida os campos via Zod antes de enviar
+5. O POST é validado novamente na API route com o mesmo schema
+
+## API mock
+```
+GET  /api/products   → retorna lista de produtos
+POST /api/products   → valida com Zod e retorna produto criado (status 201)
+```
+
+## Destaques técnicos
+
+- Schema Zod reutilizado no cliente e no servidor — sem duplicação de regras
+- `PRODUCT_STATUSES as const` como única fonte de verdade para os status
+- `useMemo` para derivar a lista filtrada sem efeitos colaterais
+- Skeleton de loading com `animate-pulse` nativo do Tailwind
+- Labels acessíveis com `htmlFor` + `id` em todos os campos do formulário
+- `strict: true` no tsconfig
+
+## Próximos passos
+
+- Paginação na tabela
+- Custom hook `useProducts` para encapsular fetch e estado
+- Testes com Vitest + Testing Library
+- Integração com backend real
+- Autenticação com NextAuth
+
+## Autor
+
+**David Rodrigues**
+Portfólio com projetos em QA, automação, dados e desenvolvimento.
+
+- GitHub: [Dev02553](https://github.com/Dev02553)
+- LinkedIn: [david-silva-rodrigues](https://www.linkedin.com/in/david-silva-rodrigues-500190284/)
+- E-mail: David_2553@hotmail.com
+>>>>>>> c0b2770 (refactor: centraliza tipos, melhora a11y e UX do dashboard)

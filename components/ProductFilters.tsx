@@ -1,6 +1,5 @@
-import type { ProductStatus } from "@/lib/types";
-
-export type SortField = "name" | "price" | "stock";
+import { PRODUCT_STATUSES } from "@/lib/types";
+import type { StatusFilter, SortField } from "@/lib/types";
 
 export function ProductFilters({
   search,
@@ -12,8 +11,8 @@ export function ProductFilters({
 }: {
   search: string;
   onSearchChange: (value: string) => void;
-  status: "Todos" | ProductStatus;
-  onStatusChange: (value: "Todos" | ProductStatus) => void;
+  status: StatusFilter;
+  onStatusChange: (value: StatusFilter) => void;
   sortBy: SortField;
   onSortByChange: (value: SortField) => void;
 }) {
@@ -29,12 +28,12 @@ export function ProductFilters({
       <select
         className="rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 outline-none transition focus:border-zinc-500"
         value={status}
-        onChange={(e) => onStatusChange(e.target.value as "Todos" | ProductStatus)}
+        onChange={(e) => onStatusChange(e.target.value as StatusFilter)}
       >
         <option value="Todos">Todos</option>
-        <option value="Ativo">Ativo</option>
-        <option value="Pendente">Pendente</option>
-        <option value="Arquivado">Arquivado</option>
+        {PRODUCT_STATUSES.map((s) => (
+          <option key={s} value={s}>{s}</option>
+        ))}
       </select>
 
       <select
