@@ -1,17 +1,57 @@
-# Dashboard (Next/React) consumindo API
+# Dashboard de Catálogo com Busca em Linguagem Natural
 
-Interface de produto com tabela, filtros, formulários e integração com backend.
+Dashboard administrativo construído para transformar dados de catálogo em **decisão rápida**.  
+O projeto simula um cenário de varejo em que é importante identificar produtos sem estoque, itens inativos e sinais de risco operacional **sem depender de relatórios manuais**.
 
-![Status](https://img.shields.io/badge/status-completo-22c55e)
-![Next.js](https://img.shields.io/badge/Next.js-15-black)
-![React](https://img.shields.io/badge/React-19-61dafb)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6)
-![Tailwind](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8)
+Além da interface, a aplicação também demonstra uma base técnica sólida com **Next.js, React, TypeScript, API Routes, validação com Zod e testes automatizados**.
+
+## Demo
+
+- **Projeto:** https://portfolio-site-nine-tau-41.vercel.app/projects/react-dashboard
+- **Aplicação:** https://dashboard-next-react-api.vercel.app/
+
+---
 
 ## Sobre o projeto
 
-Este projeto simula uma interface moderna de produto, com foco em listagem, busca, filtros, ordenação e validação de formulário.  
-A aplicação foi estruturada para servir como base reutilizável em dashboards administrativos e painéis internos, com organização simples, componentes escaláveis e integração com API.
+Em operações de varejo, o dado só gera valor quando consegue chegar rápido à decisão.  
+Se um gestor precisa esperar o relatório do dia seguinte para descobrir ruptura de estoque, a venda já foi perdida.
+
+Este projeto foi pensado para reduzir essa fricção. A interface organiza o catálogo com filtros, ordenação, métricas rápidas e busca em linguagem natural, permitindo localizar produtos por intenção — por exemplo: **"sem estoque"**, **"estoque baixo"**, **"mais caro"** ou **"inativos"**.
+
+Do lado técnico, a aplicação foi construída com foco em clareza, previsibilidade e evolução. A estrutura separa bem interface, lógica de busca, tipos, validação e API mock, facilitando a troca futura por um backend real.
+
+---
+
+## O que o projeto resolve
+
+- Torna dados de catálogo mais fáceis de navegar
+- Reduz o tempo para identificar risco de ruptura
+- Dá visibilidade rápida para itens inativos
+- Organiza filtros e ordenação sem poluir a experiência
+- Simula uma ferramenta interna de apoio à decisão em contexto de varejo
+
+---
+
+## Principais funcionalidades
+
+- **Busca em linguagem natural** para consultas como:
+  - `sem estoque`
+  - `estoque baixo`
+  - `mais caro`
+  - `inativos`
+  - `eletrônicos`
+- **Filtros por categoria e status**
+- **Ordenação por nome, preço e estoque**
+- **Resumo visual dos filtros ativos**
+- **KPIs operacionais** com leitura rápida no topo da interface
+- **Tabela de produtos** com status e contexto visual
+- **Formulário com validação**
+- **Integração com API mock via fetch**
+- **Build pronto para deploy na Vercel**
+- **Testes automatizados com Vitest**
+
+---
 
 ## Stack utilizada
 
@@ -20,198 +60,28 @@ A aplicação foi estruturada para servir como base reutilizável em dashboards 
 - **TypeScript**
 - **Tailwind CSS**
 - **Zod**
-- **API Route mock com Next.js**
+- **Vitest**
+- **Testing Library**
+- **API Routes com Next.js**
 
-## Funcionalidades
-
-- Tabela de produtos
-- Busca por nome
-- Filtro por status
-- Ordenação por nome, preço e estoque
-- Formulário com validação
-- Estrutura pronta para deploy no Vercel
-- Integração inicial com backend via `fetch`
-
-## Preview
-
-> Adicione aqui uma screenshot da aplicação depois que rodar localmente ou publicar no Vercel.
-
-## Como executar
-
-### Instalação
-
-```bash
-npm install
-Ambiente de desenvolvimento
-npm run dev
-
-<<<<<<< HEAD
-A aplicação ficará disponível em:
-
-http://localhost:3000
-Build de produção
-npm run build
-Executar versão de produção
-npm run start
-Estrutura do projeto
-dashboard_next_react_api/
-├── app/
-│   ├── api/
-│   │   └── products/
-│   │       └── route.ts
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── ProductForm.tsx
-│   └── ProductTable.tsx
-├── lib/
-│   └── data.ts
-├── package.json
-├── tsconfig.json
-├── tailwind.config.ts
-├── postcss.config.js
-└── README.md
-Fluxo da aplicação
-
-A tabela consome dados da rota /api/products
-
-Os produtos são listados dinamicamente na interface
-
-O usuário pode:
-
-buscar produtos
-
-filtrar por status
-
-ordenar resultados
-
-O formulário valida os campos antes de enviar
-
-A estrutura já está preparada para troca do mock por backend real
-
-API utilizada
-
-Atualmente o projeto usa uma rota mock interna:
-
-GET /api/products
-
-Ela retorna uma lista de produtos em JSON para simular a integração com backend.
-
-Destaques técnicos
-
-Componentização simples e reaproveitável
-
-Separação entre interface, componentes e dados mockados
-
-Validação com Zod
-
-UI pensada para escala e manutenção
-
-Projeto Vercel-ready
-
-Base estável para evolução com autenticação, paginação e testes
-
-Próximos passos
-
-Adicionar paginação
-
-Melhorar estados de loading, empty e error
-
-Integrar com backend real
-
-Adicionar autenticação
-
-Implementar testes de interface com Playwright
-
-Caso de uso
-
-Dashboards precisam ser rápidos e claros: listar dados, filtrar, editar e manter consistência visual.
-
-Este projeto foi pensado como uma base de interface administrativa para operações, produtos ou sistemas internos, servindo como ponto de partida para aplicações mais robustas.
-
-Repositório
-https://github.com/Dev02553/dashboard-next-react-api
-Autor
-
-David Rodrigues
-
-Portfólio com projetos em QA, automação, dados e desenvolvimento.
-
-GitHub: https://github.com/Dev02553
-
-LinkedIn: https://www.linkedin.com/in/david-silva-rodrigues-500190284/
-
-E-mail: David_2553@hotmail.com
-=======
-Acesse em `http://localhost:3000`
-
-## Build de produção
-```bash
-npm run build
-npm run start
-```
-
-## Estrutura do projeto
-```
-dashboard_next_react_api/
-├── app/
-│   ├── api/products/route.ts   # API mock (GET + POST)
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── Badge.tsx
-│   ├── DashboardShell.tsx      # fetch, loading, error e estado global
-│   ├── KpiCard.tsx
-│   ├── ProductFilters.tsx
-│   ├── ProductForm.tsx
-│   └── ProductTable.tsx
-├── lib/
-│   ├── mock-products.ts
-│   ├── product-schema.ts       # schema Zod compartilhado
-│   └── types.ts                # tipos e constantes centralizados
-├── package.json
-└── tsconfig.json
-```
-
-## Fluxo da aplicação
-
-1. `DashboardShell` faz `fetch` em `/api/products` ao montar
-2. Durante o carregamento, exibe skeleton de loading
-3. Os produtos são listados na tabela com busca, filtro e ordenação
-4. O formulário valida os campos via Zod antes de enviar
-5. O POST é validado novamente na API route com o mesmo schema
-
-## API mock
-```
-GET  /api/products   → retorna lista de produtos
-POST /api/products   → valida com Zod e retorna produto criado (status 201)
-```
+---
 
 ## Destaques técnicos
 
-- Schema Zod reutilizado no cliente e no servidor — sem duplicação de regras
-- `PRODUCT_STATUSES as const` como única fonte de verdade para os status
-- `useMemo` para derivar a lista filtrada sem efeitos colaterais
-- Skeleton de loading com `animate-pulse` nativo do Tailwind
-- Labels acessíveis com `htmlFor` + `id` em todos os campos do formulário
-- `strict: true` no tsconfig
+- **Busca em linguagem natural sem IA externa**, baseada em interpretação de intenção e termos parciais
+- **Tipagem centralizada** para reduzir inconsistência entre interface, formulário e API
+- **Validação com Zod** aplicada no envio e na API mock
+- **Separação entre dados, componentes e regras de negócio**
+- **Compatibilidade com fluxo de testes automatizados**
+- **Estrutura pronta para evolução** para backend real e autenticação
+- **Projeto validado com `npm run test` e `npm run build`**
 
-## Próximos passos
+---
 
-- Paginação na tabela
-- Custom hook `useProducts` para encapsular fetch e estado
-- Testes com Vitest + Testing Library
-- Integração com backend real
-- Autenticação com NextAuth
+## Como executar localmente
 
-## Autor
+### 1. Clonar o repositório
 
-**David Rodrigues**
-Portfólio com projetos em QA, automação, dados e desenvolvimento.
-
-- GitHub: [Dev02553](https://github.com/Dev02553)
-- LinkedIn: [david-silva-rodrigues](https://www.linkedin.com/in/david-silva-rodrigues-500190284/)
-- E-mail: David_2553@hotmail.com
->>>>>>> c0b2770 (refactor: centraliza tipos, melhora a11y e UX do dashboard)
+```bash
+git clone https://github.com/Dev02553/dashboard-next-react-api.git
+cd dashboard-next-react-api
