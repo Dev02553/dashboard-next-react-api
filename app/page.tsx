@@ -1,107 +1,144 @@
-import { DashboardShell } from "@/components/DashboardShell";
+'use client'
 
-const tags = [
-  "Frontend",
-  "Produto",
-  "Next.js",
-  "React",
-  "TypeScript",
-  "Tailwind",
-  "API",
-  "Repositório",
-  "Métricas",
-  "UI",
-  "Tabela + filtros",
-  "busca e ordenação",
-  "Forms",
-  "Validação",
-  "inputs consistentes",
-  "Integração",
-  "fetch/handlers",
-  "Deploy",
-  "Vercel-ready",
-  "build estável",
-];
+import { InsightBar } from '@/components/InsightBar'
+import { ProductFilters } from '@/components/ProductFilters'
+import { ProductTable } from '@/components/ProductTable'
+import { useProducts } from '@/hooks/useProducts'
+
+function MetricCard({
+  label,
+  value,
+  helper,
+}: {
+  label: string
+  value: string | number
+  helper: string
+}) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-2xl font-bold text-slate-900">{value}</p>
+      <p className="mt-1 text-xs text-slate-500">{helper}</p>
+    </div>
+  )
+}
 
 export default function Page() {
+  const {
+    loading,
+    products,
+    categories,
+    query,
+    setQuery,
+    category,
+    setCategory,
+    status,
+    setStatus,
+    sortBy,
+    setSortBy,
+    metrics,
+  } = useProducts()
+
+  const resultsLabel = products.length === 1 ? 'resultado' : 'resultados'
+
+  const activeFilters = [
+    query ? `“${query}”` : null,
+    category !== 'all' ? category : null,
+    status === 'active' ? 'Ativos' : status === 'inactive' ? 'Inativos' : null,
+    sortBy !== 'relevance'
+      ? {
+          'price-desc': 'Maior preço',
+          'price-asc': 'Menor preço',
+          'stock-asc': 'Menor estoque',
+          'stock-desc': 'Maior estoque',
+          'name-asc': 'Nome A-Z',
+        }[sortBy]
+      : null,
+  ].filter(Boolean)
+
   return (
-    <main className="mx-auto min-h-screen max-w-7xl px-6 py-10 lg:px-8">
-      <header className="mb-10">
-        <p className="mb-3 text-sm uppercase tracking-[0.24em] text-zinc-500">Completo • 2026</p>
-        <h1 className="mb-3 text-4xl font-bold tracking-tight text-zinc-100 md:text-5xl">
-          Dashboard (Next/React) consumindo API
-        </h1>
-        <p className="max-w-3xl text-base leading-7 text-zinc-300">
-          Interface de produto com tabela, filtros, formulários e integração com backend.
-        </p>
-      </header>
+    <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-8">
+      <div className="mx-auto max-w-7xl">
+        <header className="mb-8">
+          <p className="text-sm font-medium text-blue-600">Dashboard de catálogo</p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950">
+            Gestão de produtos com leitura rápida de risco e oportunidade
+          </h1>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
+            Este projeto simula um dashboard de varejo para acompanhar catálogo,
+            estoque e status operacional. O foco é transformar dados em decisão:
+            identificar ruptura antes da perda de venda, destacar itens inativos e
+            reduzir fricção na análise.
+          </p>
+        </header>
 
-      <section className="mb-10 flex flex-wrap gap-2">
-        {tags.map((tag) => (
-          <span key={tag} className="rounded-full border border-zinc-700 bg-zinc-900/50 px-3 py-1 text-sm text-zinc-300">
-            {tag}
+        <section className="mb-6 rounded-2xl border border-blue-200 bg-blue-50 p-4">
+          <p className="text-sm leading-6 text-blue-900">
+            <strong>Busca em linguagem natural:</strong> digite consultas como
+            <span className="font-semibold"> “sem estoque”</span>,
+            <span className="font-semibold"> “estoque baixo”</span>,
+            <span className="font-semibold"> “mais caro”</span> ou
+            <span className="font-semibold"> “inativo”</span>.
+          </p>
+        </section>
+
+        <section className="mb-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <MetricCard
+            label="Produtos totais"
+            value={metrics.total}
+            helper="Base disponível no catálogo"
+          />
+          <MetricCard
+            label="Produtos ativos"
+            value={metrics.active}
+            helper="Itens com operação ativa"
+          />
+          <MetricCard
+            label="Sem estoque"
+            value={metrics.noStock}
+            helper="Risco imediato de ruptura"
+          />
+          <MetricCard
+            label="Ticket médio"
+            value={`R$ ${metrics.averageTicket.toLocaleString('pt-BR')}`}
+            helper="Preço médio do portfólio"
+          />
+        </section>
+
+        <ProductFilters
+          query={query}
+          setQuery={setQuery}
+          category={category}
+          setCategory={setCategory}
+          status={status}
+          setStatus={setStatus}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          categories={categories}
+        />
+
+        <InsightBar products={products} />
+
+        <div className="mb-3 rounded-xl bg-slate-100 px-3 py-2 text-sm text-slate-700">
+          <span className="font-medium text-slate-900">
+            {products.length} {resultsLabel}
           </span>
-        ))}
-      </section>
-
-      <DashboardShell />
-
-      <section className="mt-12 grid gap-8 lg:grid-cols-3">
-  <article className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6">
-    <h2 className="mb-3 text-2xl font-semibold text-zinc-100">Como executar</h2>
-    <div className="space-y-3 text-zinc-300">
-      <p><strong>Desenvolvimento</strong><br />npm run dev</p>
-      <p><strong>Build de produção</strong><br />npm run build</p>
-      <p><strong>Iniciar produção</strong><br />npm run start</p>
-      <p className="text-sm text-zinc-500">
-        Rode dentro da pasta que contém o package.json do projeto.
-      </p>
-    </div>
-  </article>
-
-        <article className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6">
-    <h2 className="mb-3 text-2xl font-semibold text-zinc-100">Destaques</h2>
-    <ul className="list-disc space-y-2 pl-5 text-zinc-300">
-      <li>DataTable com busca, filtros e ordenação</li>
-      <li>Formulário com validação via Zod</li>
-      <li>Schema compartilhado entre cliente e API</li>
-      <li>Tipos centralizados em lib/types.ts</li>
-      <li>Estrutura pronta para deploy no Vercel</li>
-    </ul>
-  </article>
-
-        <article className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6">
-    <h2 className="mb-3 text-2xl font-semibold text-zinc-100">Case Study</h2>
-    <div className="space-y-4 text-zinc-300">
-      <div>
-        <h3 className="font-medium text-white">Contexto</h3>
-        <p>Dashboards precisam ser rápidos e claros: listar dados, filtrar, editar e manter consistência visual.</p>
-      </div>
-      <div>
-        <h3 className="font-medium text-white">Objetivo</h3>
-        <p>Criar UI focada em produto: tabela, filtros e formulários. Organizar componentes para escala e manutenção. Preparar para deploy e iteração contínua.</p>
-      </div>
-      <div>
-        <h3 className="font-medium text-white">Próximos passos</h3>
-        <p>Paginação, testes de UI com Playwright para fluxos críticos, integração com backend real e autenticação.</p>
-      </div>
-    </div>
-        </article>
-    </section>
-
-      <footer className="mt-16 border-t border-zinc-800 pt-8 text-sm text-zinc-400">
-        <p className="text-base font-semibold text-zinc-200">David Rodrigues</p>
-        <p className="mt-1">Portfólio com projetos em QA, automação, dados e desenvolvimento.</p>
-        <div className="mt-4 flex flex-wrap gap-4">
-          <span>Home</span>
-          <span>Projetos</span>
-          <span>Sobre</span>
-          <span>Contato</span>
-          <span>GitHub</span>
-          <span>LinkedIn</span>
-          <span>David_2553@hotmail.com</span>
+          {activeFilters.length > 0 && (
+            <>
+              {' — '}
+              {activeFilters.join(' • ')}
+            </>
+          )}
         </div>
-      </footer>
+
+        {loading ? (
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500 shadow-sm">
+            Carregando produtos...
+          </div>
+        ) : (
+          <ProductTable products={products} />
+        )}
+      </div>
     </main>
-  );
+  )
 }

@@ -1,111 +1,126 @@
-"use client";
+import { StatusBadge } from '@/components/StatusBadge'
+import type { Product } from '@/lib/types'
 
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/Badge";
-import type { Product, StatusFilter, SortField } from "@/lib/types";
+type LegacySort = 'name' | 'price' | 'stock'
+type LegacyStatus = 'Todos' | string
 
-const PAGE_SIZE = 5;
+type Props = {
+  products?: Product[]
+  items?: Product[]
+  search?: string
+  status?: LegacyStatus
+  sortBy?: LegacySort
+}
+
+const currency = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+})
+
+function normalize(value: string) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+}
+
+function matchesStatus(product: Product, selectedStatus: string) {
+  const selected = normalize(selectedStatus)
+  const current = normalize(String(product.status))
+
+  if (!selected || selected === 'todos') return true
+
+  if (selected === 'ativo') {
+    return current === 'ativo' || current === 'active'
+  }
+
+  if (selected === 'inativo') {
+    return current === 'inativo' || current === 'inactive'
+  }
+
+  return current === selected
+}
+
+function sortItems(items: Product[], sortBy: LegacySort) {
+  const result = [...items]
+
+  switch (sortBy) {
+    case 'price':
+      return result.sort((a, b) => a.price - b.price)
+    case 'stock':
+      return result.sort((a, b) => a.stock - b.stock)
+    case 'name':
+    default:
+      return result.sort((a, b) => a.name.localeCompare(b.name))
+  }
+}
 
 export function ProductTable({
+  products,
   items,
-  search,
-  status,
-  sortBy,
-}: {
-  items: Product[];
-  search: string;
-  status: StatusFilter;
-  sortBy: SortField;
-}) {
-  const [page, setPage] = useState(1);
+  search = '',
+  status = 'Todos',
+  sortBy = 'name',
+}: Props) {
+  const filtered = Array.isArray(products)
+    ? products
+    : sortItems(
+        (items ?? []).filter((product) => {
+          const query = normalize(search)
 
-  const filtered = useMemo(() => {
-    setPage(1);
-    return [...items]
-      .filter((item) => (status === "Todos" ? true : item.status === status))
-      .filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))
-      .sort((a, b) => {
-        if (sortBy === "name") return a.name.localeCompare(b.name);
-        return a[sortBy] - b[sortBy];
-      });
-  }, [items, search, status, sortBy]);
+          const matchesSearch =
+            !query ||
+            normalize(product.name).includes(query) ||
+            normalize(product.category).includes(query)
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+          return matchesSearch && matchesStatus(product, status)
+        }),
+        sortBy
+      )
+
+  if (filtered.length === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
+        <p className="mb-2 font-medium text-slate-700">0 item(ns)</p>
+        <p>Nenhum produto encontrado</p>
+      </div>
+    )
+  }
 
   return (
-    <section className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-6 shadow-sm">
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-semibold text-zinc-100">Produtos</h2>
-          <p className="text-sm text-zinc-400">Tabela com busca, filtros e ordenação.</p>
-        </div>
-        <span className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-300">
-          {filtered.length} item(ns)
-        </span>
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="border-b border-slate-100 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600">
+        {filtered.length} item(ns)
       </div>
 
-      {filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <p className="text-sm font-medium text-zinc-300">Nenhum produto encontrado</p>
-          <p className="mt-1 text-sm text-zinc-500">
-            Tente ajustar a busca ou o filtro de status.
-          </p>
-        </div>
-      ) : (
-        <>
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="text-zinc-400">
-                <tr>
-                  <th className="px-3 py-2 font-medium">Produto</th>
-                  <th className="px-3 py-2 font-medium">Categoria</th>
-                  <th className="px-3 py-2 font-medium">Status</th>
-                  <th className="px-3 py-2 font-medium">Preço</th>
-                  <th className="px-3 py-2 font-medium">Estoque</th>
-                  <th className="px-3 py-2 font-medium">Atualizado</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginated.map((item) => (
-                  <tr key={item.id} className="border-t border-zinc-800 text-zinc-200">
-                    <td className="px-3 py-3 font-medium">{item.name}</td>
-                    <td className="px-3 py-3">{item.category}</td>
-                    <td className="px-3 py-3"><Badge status={item.status} /></td>
-                    <td className="px-3 py-3">R$ {item.price.toFixed(2)}</td>
-                    <td className="px-3 py-3">{item.stock}</td>
-                    <td className="px-3 py-3">{item.updatedAt}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-sm">
+          <thead className="bg-slate-50 text-left text-slate-600">
+            <tr>
+              <th className="px-4 py-3 font-semibold">Produto</th>
+              <th className="px-4 py-3 font-semibold">Categoria</th>
+              <th className="px-4 py-3 font-semibold">Preço</th>
+              <th className="px-4 py-3 font-semibold">Estoque</th>
+              <th className="px-4 py-3 font-semibold">Status</th>
+            </tr>
+          </thead>
 
-          {totalPages > 1 ? (
-            <div className="mt-4 flex items-center justify-between gap-3 border-t border-zinc-800 pt-4">
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="rounded-lg border border-zinc-700 px-3 py-1.5 text-xs text-zinc-300 transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                ← Anterior
-              </button>
-
-              <span className="text-xs text-zinc-500">
-                Página {page} de {totalPages}
-              </span>
-
-              <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                className="rounded-lg border border-zinc-700 px-3 py-1.5 text-xs text-zinc-300 transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                Próximo →
-              </button>
-            </div>
-          ) : null}
-        </>
-      )}
-    </section>
-  );
+          <tbody>
+            {filtered.map((product) => (
+              <tr key={String(product.id)} className="border-t border-slate-100">
+                <td className="px-4 py-3 font-medium text-slate-900">{product.name}</td>
+                <td className="px-4 py-3 text-slate-600">{product.category}</td>
+                <td className="px-4 py-3 text-slate-600">{currency.format(product.price)}</td>
+                <td className="px-4 py-3 text-slate-600">{product.stock}</td>
+                <td className="px-4 py-3">
+                  <StatusBadge product={product} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
 }
